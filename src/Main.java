@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -179,7 +182,7 @@ public class Main {
         while(!queue.isEmpty())
         {
             currentState = queue.poll();
-            
+
             if(!dfa.getStates().contains(currentState))
                 dfa.getStates().add(currentState);
 
@@ -218,6 +221,31 @@ public class Main {
         }
     }
 
+    public static void createDotFile(DFA dfa) throws IOException {
+
+        FileWriter fileWriter = new FileWriter(new File("graph.dot"));
+
+        fileWriter.write("digraph finite_state_machine { \n" +
+                "rankdir=LR; \n" +
+                "size=\"8,5\" \n");
+
+        fileWriter.write("node [shape = point]; q1;\n");
+        fileWriter.write("node [shape = doublecircle];");
+        for (int i = 0; i < dfa.getFinalStates().size(); i++) {
+            fileWriter.write(" " + dfa.getFinalStates().get(i));
+        }
+        fileWriter.write("; \n");
+        fileWriter.write("node [shape = circle]; \n ");
+        fileWriter.write("q1 -> " + dfa.initialState + "; \n");
+        for(int i = 0; i < dfa.getTransitions().size(); i++)
+        {
+            fileWriter.write(dfa.getTransitions().get(i).sourceState + " -> " + dfa.getTransitions().get(i).destinationState);
+            fileWriter.write(" [ label = " + dfa.getTransitions().get(i).symbol + " ]; \n");
+        }
+        fileWriter.write("}");
+        fileWriter.close();
+    }
+
     public static void main(String args[])
     {
         String regularExpression;
@@ -229,6 +257,9 @@ public class Main {
        // System.out.println("Introduceti expresia regulata in forma prefixata: ");
        // regularExpression = input.nextLine();
        // regularExpression += "#";
+        //String aux = ".";
+       // regularExpression = aux + regularExpression;
+
         regularExpression = ".|.a.b*c.*jk#";
 
         //System.out.println("Introduceti alfabetul: ");
@@ -264,7 +295,7 @@ public class Main {
         NodeInfo[] symbolsInfo = new NodeInfo[count];
         calculateFunctions(syntaxTree.root, alphabet, symbolsInfo);
 
-        syntaxTree.print();
+        /*syntaxTree.print();
 
         System.out.println(
                 "aaaaaaaaaaaa"
@@ -272,12 +303,20 @@ public class Main {
         for(int i = 0 ; i < symbolsInfo.length; i++)
         {
             System.out.println(symbolsInfo[i]);
-        }
+        }*/
 
         DFA dfa = new DFA();
         buildDFA(dfa, syntaxTree.root, alphabet, symbolsInfo);
 
         System.out.println();
         System.out.println(dfa);
+
+        try {
+            createDotFile(dfa);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Proba p = new Proba();
+        p.start2();
     }
 }
