@@ -208,11 +208,15 @@ public class Main {
                 }
                 if(!set.isEmpty())
                 {
-                    for (int j = 0; j < set.toArray().length; j++) {
+                    for (int j = 0; j < set.toArray().length; j++)
+                    {
                         state += set.toArray()[j].toString();
                     }
 
-                    dfa.getTransitions().add(new Transitions(currentState, alphabet.charAt(i), state));
+                    Transitions transition = new Transitions(currentState, alphabet.charAt(i), state);
+
+                    if(!(dfa.getTransitions().contains(transition)))
+                        dfa.getTransitions().add(transition);
 
                     if (!dfa.getStates().contains(state))
                         queue.add(state);
@@ -260,12 +264,12 @@ public class Main {
         //String aux = ".";
        // regularExpression = aux + regularExpression;
 
-        regularExpression = ".|.a.b*c.*jk#";
+        regularExpression = "..*|a.bb*|b.a.ab#";
 
         //System.out.println("Introduceti alfabetul: ");
         //alphabet = input.nextLine();
         //alphabet += "#";
-        alphabet = "abcjk#";
+        alphabet = "ab#";
 
         Tree syntaxTree;
 
@@ -316,6 +320,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Proba p = new Proba();
         p.start2();
     }

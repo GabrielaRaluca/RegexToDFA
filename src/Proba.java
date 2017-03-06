@@ -56,7 +56,7 @@ public class Proba {
 
         GraphViz gv = new GraphViz();
         gv.readSource(input);
-        System.out.println(gv.getDotSource());
+       // System.out.println(gv.getDotSource());
 
         String type = "gif";
         //    String type = "dot";
